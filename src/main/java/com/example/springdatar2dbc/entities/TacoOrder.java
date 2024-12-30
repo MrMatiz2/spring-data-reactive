@@ -2,16 +2,24 @@ package com.example.springdatar2dbc.entities;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.*;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Data
-public class TacoOrder {
+@Document
+public class TacoOrder implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
-    private Long id;
-
+    private String id;
+    private Date placedAt = new Date();
     private String deliveryName;
     private String deliveryStreet;
     private String deliveryCity;
@@ -21,16 +29,10 @@ public class TacoOrder {
     private String ccExpiration;
     private String ccCVV;
 
-    private Set<Long> tacoIds = new LinkedHashSet<>();
-
-    @Transient
-    private transient List<Taco> tacos = new ArrayList<>();
+    private List<Taco> tacos = new ArrayList<>();
 
     public void addTaco(Taco taco){
         tacos.add(taco);
-        if (taco.getId() != null){
-            tacoIds.add(taco.getId());
-        }
     }
 
 }

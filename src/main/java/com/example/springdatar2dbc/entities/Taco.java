@@ -1,28 +1,25 @@
 package com.example.springdatar2dbc.entities;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Data
-@NoArgsConstructor
-@RequiredArgsConstructor
+//@RestResource(rel = "tacos", path = "tacos")
+//@Document
 public class Taco {
 
     @Id
     private Long id;
-
-    private @NonNull String name;
-
-    private Set<Long> ingredientsIds = new HashSet<>();
+    private String name;
+    private Date createdAt = new Date();
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     public void addIngredient(Ingredient ingredient) {
-        ingredientsIds.add(ingredient.getId());
+        ingredients.add(ingredient);
     }
 
 }
