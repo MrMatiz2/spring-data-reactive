@@ -1,0 +1,8 @@
+spring:
+  data:
+    rest:
+      base-path: /data-api
+  cassandra:
+    keyspace-name: tacocloud
+    schema-action: recreate
+    local-datacenter: datacenter1

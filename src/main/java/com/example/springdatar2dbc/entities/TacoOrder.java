@@ -1,16 +1,26 @@
 package com.example.springdatar2dbc.entities;
 
+import com.datastax.oss.driver.api.core.uuid.Uuids;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Data
-public class TacoOrder {
+@Table("tacoorders")
+public class TacoOrder implements Serializable {
 
-    @Id
-    private Long id;
+    private static final long serialVersionUID = 1L;
+
+    @PrimaryKey
+    private UUID id = Uuids.timeBased();
+    private Date placedAt = new Date();
 
     private String deliveryName;
     private String deliveryStreet;
@@ -21,16 +31,15 @@ public class TacoOrder {
     private String ccExpiration;
     private String ccCVV;
 
-    private Set<Long> tacoIds = new LinkedHashSet<>();
-
-    @Transient
-    private transient List<Taco> tacos = new ArrayList<>();
+    @Column("tacos")
+    private List<TacoUDT> tacos = new ArrayList<>();
 
     public void addTaco(Taco taco){
-        tacos.add(taco);
-        if (taco.getId() != null){
-            tacoIds.add(taco.getId());
-        }
+        this.addTaco(new TacoUDT(taco.getName(), taco.getIngredients()));
+    }
+
+    public void addTaco(TacoUDT tacoUDT) {
+        tacos.add(tacoUDT);
     }
 
 }
